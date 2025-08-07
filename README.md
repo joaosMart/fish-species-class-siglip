@@ -348,10 +348,11 @@ for video_path in tqdm(video_list):
 
 ### Optimal Hyperparameters
 
-- **Detection Threshold**: 0.977989
+- **Fish Detection Threshold**: 0.977989
+- **Multiple Fish Detection Threshold**: 0.962
 - **SVM C parameter**: ~10-50 (varies by seed)
 - **Temporal Window**: 11 frames
-- **Batch Size**: 128 (GPU), 32 (CPU)
+
 
 ## 📊 Results
 
@@ -397,11 +398,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📧 Contact
 
 For questions or collaborations, please contact:
-- Email: your.email@institution.edu
+- Email: joao.da.silva.martins@hafogvatn.is
 - GitHub Issues: [Create an issue](https://github.com/yourusername/fish-species-class-siglip/issues)
 
 ## 🙏 Acknowledgments
 
-- Thanks to the aquaculture facility for providing video data
+- Thanks to the [Marine & Freshwater Research Institute of Iceland](https://www.hafogvatn.is/en) for providing the video data. 
 - OpenCLIP team for the SigLIP implementation
 - Google Colab for computational resources
