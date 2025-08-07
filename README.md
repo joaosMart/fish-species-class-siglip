@@ -90,7 +90,7 @@ pip install tqdm
 
 1. **Fish Detection Dataset**
    - [Validation Set](https://drive.google.com/drive/folders/1BAfJ8vT-DW_dbzK-oM0bzZDSMX-r-5nA?usp=drive_link)
-   - Contains: `fish/` and `no_fish/` folders and a test_set folder. The test_set folder includes independent fish and no_fish folders  from the previous ones that was used for evaluation. 
+   - Contains: `fish/` and `no_fish/` folders and a test_set_final folder. The test_set_final folder includes independent fish and no_fish folders  from the previous ones that was used for evaluation. 
 
 2. **Multi-Fish Detection Dataset**
    - [Multiple vs. Single Fish Dataset](https://drive.google.com/drive/folders/13Q2YsdajGGiR3UzDW8_zdcwAunMZRGzb?usp=sharing)
