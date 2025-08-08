@@ -6,9 +6,9 @@ This repository contains the implementation of **"Temporal Aggregation of Vision
 
 ## 🎯 Key Results
 
-- **99.1% F1-score** for fish detection (presence/absence)
-- **96.8% F1-score** for 3-way species classification (Trout, Salmon, Arctic Char)
-- **99.4% accuracy** for multi-fish detection (single vs. multiple fish)
+- **99.1% accuracy** for fish detection (presence/absence)
+- **98.2% accuracy** for multi-fish detection (single vs. multiple fish)
+- **97.5% accuracy** for 3-way species classification (Trout, Salmon, Arctic Char)
 - Robust zero-shot detection without fine-tuning
 
 ## 📋 Table of Contents
