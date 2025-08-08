@@ -68,6 +68,7 @@ All notebooks are designed to run in Google Colab. Simply click the "Open in Col
 # Clone the repository
 git clone https://github.com/yourusername/fish-species-class-siglip.git
 cd fish-species-class-siglip
+```
 
 
 ### System Requirements
@@ -144,6 +145,10 @@ negative_prompts = [
 - Threshold optimization via F1-score maximization
 - Comprehensive evaluation metrics
 
+**Notebook**: `Code/fish-detection/SigLIP_fish_detection_prediction_savings.ipynb`
+
+Using the set of best hyper-parameters (model, prompts, and threshold) defined in the last notebook it performs the detection, by filtering and saving the data for the next phase.
+
 ### 2. Multi-Fish Detection
 
 **Notebook**: `Code/multi-fish-detection/Multi_Fish_Detection.ipynb`
@@ -166,27 +171,53 @@ SINGLE_FISH_PROMPTS = [
 - Cross-validation with 30 repetitions
 - ROC analysis and threshold optimization
 
+**Notebooks**:
+- `Code/multi-fish-detection/Frame_Level_Multi_Fish_Detection.ipynb`
+- `Code/multi-fish-detection/Video_Level_MultiFish_Detection.ipynb`
+
+Destinguish between video instances with one fish and more fish. Videos with more than one fish are not passed to the next phase.
+
 ### 3. Feature Extraction
 
 **Notebook**: `Code/species-classification/Feature_Extraction.ipynb`
 
-Extracts SigLIP features from video frames for species classification.
+Extracts SigLIP and ResNet-50 features from video frames for species classification. First selects the central 11 frames and then extracts features for all the frames using the SigLIP model or only for the central frame using the central frame.
 
 ```python
 # Feature extraction configuration
 WINDOW_SIZE = 11  # frames for temporal aggregation
-MODEL_NAME = 'ViT-SO400M-14-SigLIP'
+MODEL_NAME = 'ViT-SO400M-14-SigLIP' or 'ResNet-50' 
 
 # Center expansion strategy for frame selection
 def select_frames_by_center_expansion(video_data, window_size=11):
     """Select frames with highest mean probability"""
     # Implementation details in notebook
+    
+
+class FeatureExtractor:
+    """
+    SigLIP-based feature extractor for fish species classification.
+
+    Uses ViT-SO400M-14-SigLIP model as feature extractor.
+    """
+    # Implementation details in notebook
+
+class ResNetFeatureExtractor:
+    """
+    ResNet-50 feature extractor for baseline comparison.
+
+    Implements ResNet-50 feature extraction as described in the paper
+    for comparison with SigLIP-based approach.
+    """
+    # Implementation details in notebook
+
+
 ```
 
 **Key Features:**
 - Temporal frame selection (11-frame windows)
 - SigLIP feature extraction (1152-dimensional)
-- ResNet-50 baseline comparison
+- ResNet-50 baseline feature extraction (central frame only
 - Batch processing for efficiency
 
 ### 4. Species Classification
