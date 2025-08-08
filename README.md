@@ -31,27 +31,27 @@ This repository contains the implementation of **"Temporal Aggregation of Vision
 This project implements a complete pipeline for automated fish monitoring in aquaculture environments:
 
 1. **Detection**: Identify frames containing fish using zero-shot vision-language models
-2. **Counting**: Distinguish between single and multiple fish scenarios
-3. **Classification**: Classify fish species using temporal feature aggregation
-4. **Evaluation**: Comprehensive evaluation with cross-validation and ablation studies
+2. **Multiple Fish Detection**: To find which videos contain multiple fish instances and which have single fish instances.
+3. **Classification**: Classify fish species using temporal feature aggregation.
+  
 
 ### Project Structure
 
 ```
 fish-species-class-siglip/
 ├── Code/
-│   ├── Fish_Detection_and_Evaluation.ipynb      # Main detection pipeline
-│   ├── Multi_Fish_Detection.ipynb               # Multi-fish detection
 │   ├── fish-detection/
+│   │   ├── Fish_Detection_and_Evaluation.ipynb      # Main detection experiments, validation and evaluation
 │   │   └── SigLIP_fish_detection_prediction_savings.ipynb
 │   ├── multi-fish-detection/
-│   │   ├── Frame_Level_Multi_Fish_Detection.ipynb
-│   │   └── Video_Level_MultiFish_Detection.ipynb
+│   │   ├── Multi_Fish_Detection.ipynb               # Multi-fish detection experiments, validation and evaluation
+│   │   ├── Frame_Level_Multi_Fish_Detection.ipynb   # Frame-level inference and saving of scores
+│   │   └── Video_Level_MultiFish_Detection.ipynb    # Video-level detection and saving of videos
 │   └── species-classification/
-│       ├── Feature_Extraction.ipynb              # SigLIP feature extraction
-│       ├── Classification_Central_Frame_C.ipynb  # Central frame classification
-│       ├── Evaluation.ipynb                      # Model evaluation
-│       └── resnet_transfer.ipynb                 # ResNet baseline
+│       ├── Feature_Extraction.ipynb              # SigLIP and ResNet feature extraction
+│       ├── Classification_Central_Frame_C.ipynb  # Central frame training
+│       ├── Evaluation.ipynb                      # Models evaluation (SigLIP and ResNet features)
+│       └── resnet_transfer.ipynb                 # fine-tuned ResNet baseline
 ├── LICENSE
 └── README.md
 ```
@@ -60,7 +60,7 @@ fish-species-class-siglip/
 
 ### Option 1: Google Colab (Recommended)
 
-All notebooks are designed to run in Google Colab. Simply click the "Open in Colab" badges in each notebook.
+All notebooks are designed to run in Google Colab. Simply click the "Open in Colab" badges in each notebook. 
 
 ### Option 2: Local Setup
 
@@ -69,14 +69,6 @@ All notebooks are designed to run in Google Colab. Simply click the "Open in Col
 git clone https://github.com/yourusername/fish-species-class-siglip.git
 cd fish-species-class-siglip
 
-# Install dependencies
-pip install transformers open_clip_torch
-pip install torch torchvision
-pip install scikit-learn pandas numpy
-pip install matplotlib seaborn
-pip install opencv-python decord
-pip install tqdm
-```
 
 ### System Requirements
 - Python 3.8+
@@ -97,8 +89,8 @@ pip install tqdm
    - Contains: `one_fish/` and `more_than_one_fish/` folders
 
 3. **Species Classification Videos**
-   - Contact authors for access to full video dataset
-   - Three species: Trout (Urridi), Salmon (Lax), Arctic Char (Bleikja)
+   - Available for sharing on a reasonable request to the Icelandic Marine and Freshwater Research Institute.
+   - Three species: Brown/Sea Trout  (Urriði), Atlantic Salmon (Lax), Arctic Char (Bleikja)
 
 ### Dataset Structure
 
@@ -109,23 +101,20 @@ datasets/
 │       ├── fish/          # 168 images with fish
 │       ├── no_fish/       # 163 images without fish
 │       └── test_set_final/
-├── multi_fish_detection_data/
-│   └── validation_fish_counting/
-│       ├── one_fish/      # Single fish images
-│       └── more_than_one_fish/  # Multiple fish images
-└── species_videos/
-    ├── Bleikja_*.mp4      # Arctic Char videos
-    ├── Lax_*.mp4          # Salmon videos
-    └── Urridi_*.mp4       # Trout videos
+└── multi_fish_detection_data/
+    └── validation_fish_counting/
+        ├── one_fish/      # 100 single fish images
+        └── more_than_one_fish/  # 100 multiple fish images
+
 ```
 
 ## 🔧 Pipeline Components
 
 ### 1. Fish Detection
 
-**Notebook**: `Code/Fish_Detection_and_Evaluation.ipynb`
+**Notebook**: `Code/fish-detection/Fish_Detection_and_Evaluation.ipynb`
 
-Implements zero-shot fish detection using SigLIP vision-language models with prompt engineering.
+Shows the implementation and experiments performed that are connected to the zero-shot fish detection using SigLIP vision-language models with prompt engineering. This includes model performance, threshold selection, validation and evaluation. 
 
 ```python
 # Key configuration
@@ -150,16 +139,16 @@ negative_prompts = [
 ```
 
 **Key Features:**
-- Model architecture comparison (9 different CLIP/SigLIP variants)
+- Model architecture comparison (9 different CLIP/SigLIP/EVA variants)
 - Prompt engineering with ensemble averaging
 - Threshold optimization via F1-score maximization
 - Comprehensive evaluation metrics
 
 ### 2. Multi-Fish Detection
 
-**Notebook**: `Code/Multi_Fish_Detection.ipynb`
+**Notebook**: `Code/multi-fish-detection/Multi_Fish_Detection.ipynb`
 
-Distinguishes between single and multiple fish in frames.
+Distinguishes between single and multiple fish in frames. It includes all the exeriments connected with the frame-level and video-level multiple fish detection. For the frame-level detection it includes the experiments with prompt engineering, cross-validation, threshold selection and evaluation.
 
 ```python
 # Optimized prompts for multi-fish detection
@@ -169,11 +158,9 @@ MULTIPLE_FISH_PROMPTS = [
 ]
 
 SINGLE_FISH_PROMPTS = [
-    "Clear image of a single fish swimming in a river.",
-    "Clear image of a single fish swimming in a contained environment."
+    "Clear image of a single fish swimming in a river."
 ]
 ```
-
 **Key Features:**
 - Zero-shot classification for fish counting
 - Cross-validation with 30 repetitions
