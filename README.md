@@ -432,8 +432,20 @@ for video_path in tqdm(video_list):
 - **Features**: 1152-dimensional normalized vectors
 - **Context**: Vision-language alignment without fine-tuning
 
+Performance Comparison
+ModelArchitectureMacro F1Data EfficiencySigLIP + Temporal PoolingViT-SO400M-1496.8%750 samples for 95%SigLIP + Central FrameViT-SO400M-1495.2%2,500 samples for 95%SigLIP + Temporal VotingViT-SO400M-1496.6%~1,000 samples for 95%ResNet-50 Fine-tunedResNet-5095.3%>3,000 samples for 95%ResNet-50 Features + SVMResNet-5091.2%Poor data efficiency
+
 
 ## 📊 Results
+
+| Model | Architecture | Macro F1 | Data Efficiency |
+|-------|-------------|----------|-----------------|
+| **SigLIP + Temporal Pooling (SVM)** | ViT-SO400M-14 | 96.8% | 750 samples for 95% |
+| SigLIP + Central Frame (SVM) | ViT-SO400M-14 | 95.2% | 2,500 samples for 95% |
+| SigLIP + Temporal Voting(SVM) | ViT-SO400M-14 | 96.6% | ~1,000 samples for 95% |
+| ResNet-50 Fine-tuned | ResNet-50 | 95.3% | >3,000 samples for 95% |
+| ResNet-50 Features + SVM | ResNet-50 | 91.2% | Poor data efficiency |
+
 
 ### Fish Detection Performance
 - **Accuracy**: 99.1%
