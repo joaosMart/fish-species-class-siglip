@@ -435,8 +435,15 @@ for video_path in tqdm(video_list):
 Performance Comparison
 ModelArchitectureMacro F1Data EfficiencySigLIP + Temporal PoolingViT-SO400M-1496.8%750 samples for 95%SigLIP + Central FrameViT-SO400M-1495.2%2,500 samples for 95%SigLIP + Temporal VotingViT-SO400M-1496.6%~1,000 samples for 95%ResNet-50 Fine-tunedResNet-5095.3%>3,000 samples for 95%ResNet-50 Features + SVMResNet-5091.2%Poor data efficiency
 
+## 📊 Performance
 
-## 📊 Results
+### Fish Detection Performance
+- **Accuracy**: 99.1%
+- **Precision**: 100%
+- **Recall**: 98.2%
+- **F1-Score**: 99.1%
+
+### Species Classification Performance (3-way)
 
 | Model | Architecture | Macro F1 | Data Efficiency |
 |-------|-------------|----------|-----------------|
@@ -446,14 +453,7 @@ ModelArchitectureMacro F1Data EfficiencySigLIP + Temporal PoolingViT-SO400M-1496
 | ResNet-50 Fine-tuned | ResNet-50 | 95.3% | >3,000 samples for 95% |
 | ResNet-50 Features + SVM | ResNet-50 | 91.2% | Poor data efficiency |
 
-
-### Fish Detection Performance
-- **Accuracy**: 99.1%
-- **Precision**: 100%
-- **Recall**: 98.2%
-- **F1-Score**: 99.1%
-
-### Species Classification Performance (3-way)
+For **SigLIP + Temporal Pooling (SVM)**:
 - **Balanced Accuracy**: 96.5%
 - **Macro F1-Score**: 96.8%
 - **Per-species F1**: 
