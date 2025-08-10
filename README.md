@@ -489,7 +489,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📧 Contact
 
 For questions or collaborations, please contact:
-- Email: joao.da.silva.martins@hafogvatn.is
+- Email: jrd4@hi.is
 - GitHub Issues: [Create an issue](https://github.com/yourusername/fish-species-class-siglip/issues)
 
 ## 🙏 Acknowledgments
