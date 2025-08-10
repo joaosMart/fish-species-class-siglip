@@ -32,7 +32,7 @@ This project implements a complete pipeline for automated fish monitoring in aqu
 
 1. **Detection**: Identify frames containing fish using zero-shot vision-language models
 2. **Multiple Fish Detection**: To find which videos contain multiple fish instances and which have single fish instances.
-3. **Classification**: Classify fish species using temporal feature aggregation.
+3. **Classification**: Classify fish species using temporal  aggregation.
   
 
 ### Project Structure
@@ -48,10 +48,12 @@ fish-species-class-siglip/
 │   │   ├── Frame_Level_Multi_Fish_Detection.ipynb   # Frame-level inference and saving of scores
 │   │   └── Video_Level_MultiFish_Detection.ipynb    # Video-level detection and saving of videos
 │   └── species-classification/
-│       ├── Feature_Extraction.ipynb              # SigLIP and ResNet feature extraction
-│       ├── Classification_Central_Frame_C.ipynb  # Central frame training
-│       ├── Evaluation.ipynb                      # Models evaluation (SigLIP and ResNet features)
-│       └── resnet_transfer.ipynb                 # fine-tuned ResNet baseline
+│       ├── Extraction.ipynb                                 # SigLIP and ResNet  extraction
+│       ├── Classification_Central_Frame_C.ipynb             # Central frame training
+│       ├── Temporal_Pooling_Training_and_validation.ipynb   # Training and Validation for Temporal Pooling
+│       ├── Evaluation.ipynb                                 # Models evaluation (SigLIP and ResNet s)
+│       ├── ResNet_50_finetuned.ipynb                        # fine-tuned ResNet baseline
+│       └── Learning_Curve_ResNet_50_fine_tuned.ipynb        # Learning Curve for ResNet-50 
 ├── LICENSE
 └── README.md
 ```
@@ -91,7 +93,7 @@ cd fish-species-class-siglip
 
 3. **Species Classification Videos**
    - Available for sharing on a reasonable request to the Icelandic Marine and Freshwater Research Institute.
-   - Three species: Brown/Sea Trout  (Urriði), Atlantic Salmon (Lax), Arctic Char (Bleikja)
+   - Three species: Brown/Sea Trout (Urriði), Atlantic Salmon (Lax), Arctic Char (Bleikja)
 
 ### Dataset Structure
 
@@ -139,7 +141,7 @@ negative_prompts = [
 ]
 ```
 
-**Key Features:**
+**Key s:**
 - Model architecture comparison (9 different CLIP/SigLIP/EVA variants)
 - Prompt engineering with ensemble averaging
 - Threshold optimization via F1-score maximization
@@ -166,7 +168,7 @@ SINGLE_FISH_PROMPTS = [
     "Clear image of a single fish swimming in a river."
 ]
 ```
-**Key Features:**
+**Key s:**
 - Zero-shot classification for fish counting
 - Cross-validation with 30 repetitions
 - ROC analysis and threshold optimization
@@ -217,7 +219,7 @@ class ResNetFeatureExtractor:
 **Key Features:**
 - Temporal frame selection (11-frame windows)
 - SigLIP feature extraction (1152-dimensional)
-- ResNet-50 baseline feature extraction (central frame only
+- ResNet-50 baseline feature extraction (central frame only)
 - Batch processing for efficiency
 
 ### 4. Species Classification
@@ -243,6 +245,65 @@ class_names = ['Bleikja', 'Lax', 'Urridi']  # Arctic Char, Salmon, Trout
 - Balanced class weights for imbalanced data
 - Comprehensive metrics reporting
 
+#### 4.1 Temporal Pooling
+
+**Notebook:** Code/species-classification/Temporal_Pooling_Training_and_validation.ipynb
+
+Training and validation of the temporal aggregation approach that significantly improves performance.
+
+```python
+class TemporalPoolingClassifier:
+    """
+    Temporal pooling strategy for fish species classification.
+    
+    Averages SigLIP features across 11-frame sequences to create
+    robust representations that capture temporal information.
+    """
+    
+    def extract_temporal_features(self, frame_sequence):
+        """Average features across temporal window"""
+        features = []
+        for frame in frame_sequence:
+            feature = self.feature_extractor(frame)
+            features.append(feature)
+        
+        # Temporal pooling via mean aggregation
+        pooled_features = np.mean(features, axis=0)
+        return pooled_features / np.linalg.norm(pooled_features)
+```
+
+
+Key Results:
+* **96.8% macro F1-score** (1.6% improvement over central frame)
+* Statistically significant improvement (p < 0.001, Cohen's d = 1.79)
+* Reaches 95% performance with only 750 samples (76% data reduction)
+* Superior stability with larger datasets (>2,000 samples)
+
+### 6. Baseline Models
+
+**Notebook:** Code/species-classification/ResNet_50_finetuned.ipynb
+
+Fine-tuned ResNet-50 baseline for comparison.
+
+```python
+class ResNet50Baseline:
+    """Fine-tuned ResNet-50 for fish species classification"""
+    
+    def __init__(self, num_classes=3):
+        self.model = models.resnet50(pretrained=True)
+        self.model.fc = nn.Linear(2048, num_classes)
+        
+    def train_with_differential_lr(self):
+        """Layer-wise learning rates for optimal fine-tuning"""
+        # Implementation with differential learning rates
+```
+
+Performance:
+* Fine-tuned ResNet-50: 95.3% macro F1-score
+* Outperformed by SigLIP + temporal pooling across all metrics
+* Requires significantly more training data to reach comparable performance
+
+  
 ## 📖 Usage Guide
 
 ### Complete Pipeline Workflow
@@ -285,19 +346,35 @@ filtered_data = load_filtered_data('filtered_data_class.json')
 # Output: features/ViT-SO400M-14-SigLIP/*.npz
 ```
 
-#### Step 4: Classify Species
+#### Step 4: Classify Species and Evalute
 
 ```python
 # In Classification_Central_Frame_C.ipynb
+# and in Temporal_Pooling_Training_and_validation.ipynb
 
 # Load features and train classifier
 data_dir = "features/ViT-SO400M-14-SigLIP"
 results = run_multi_seed_optimization(
     data_dir=data_dir,
     class_names=['Bleikja', 'Lax', 'Urridi'],
+    base_seed=42
     n_seeds=10
 )
+
+# Evaluate
+## In Evaluation.ipynb
+### Temporal pooling, single frame classifier (SigLIP and ResNet)
+
+grid_search_dir = "/path/to/{Temporal Pooling/Single Frame}/model_optimization_{date_time}_multiseed"  # Output of run_multi_seed_optimization 
+run_evaluation(data_dir, grid_search_dir)                                                              # Run evaluation
+
+### Temporal Voting
+grid_search_dir = "/path/to/Single Frame/model_optimization_{date_time}_multiseed"   # Best parameter of the single frame model 
+results = run_temporal_voting_evaluation(data_dir, grid_search_dir)                  # Run evaluation
+
 ```
+
+
 
 ### Quick Start Examples
 
@@ -354,22 +431,6 @@ for video_path in tqdm(video_list):
 - **Pretraining**: WebLI dataset
 - **Features**: 1152-dimensional normalized vectors
 - **Context**: Vision-language alignment without fine-tuning
-
-### Performance Comparison
-
-| Model | Fish Detection F1 | Species Classification F1 |
-|-------|------------------|--------------------------|
-| ViT-SO400M-14-SigLIP | **99.1%** | **96.8%** |
-| ViT-B-16-SigLIP | 98.5% | 95.2% |
-| ResNet-50 (baseline) | - | 89.3% |
-| ViT-L-14 CLIP | 94.2% | 91.5% |
-
-### Optimal Hyperparameters
-
-- **Fish Detection Threshold**: 0.977989
-- **Multiple Fish Detection Threshold**: 0.962
-- **SVM C parameter**: ~10-50 (varies by seed)
-- **Temporal Window**: 11 frames
 
 
 ## 📊 Results
