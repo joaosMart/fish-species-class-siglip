@@ -68,7 +68,7 @@ All notebooks are designed to run in Google Colab. Simply click the "Open in Col
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/fish-species-class-siglip.git
+git clone https://github.com/joaosMart/fish-species-class-siglip.git
 cd fish-species-class-siglip
 ```
 
@@ -490,7 +490,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 For questions or collaborations, please contact:
 - Email: jrd4@hi.is
-- GitHub Issues: [Create an issue](https://github.com/yourusername/fish-species-class-siglip/issues)
+- GitHub Issues: [Create an issue](https://github.com/joaosMart/fish-species-class-siglip/issues)
 
 ## 🙏 Acknowledgments
 
