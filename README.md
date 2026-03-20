@@ -470,11 +470,13 @@ For **SigLIP + Temporal Pooling (SVM)**:
 If you use this code in your research, please cite:
 
 ```bibtex
-@article{YourPaper2024,
-  title={Temporal Aggregation of Vision-Language Features for High-Accuracy Fish Classification in Automated Monitoring},
-  author={Your Name and Collaborators},
-  journal={Journal Name},
-  year={2024}
+@article{da2025temporal,
+  title={Temporal aggregation of vision-language features for high-accuracy fish classification in automated monitoring},
+  author={da Silva Martins, Jo{\~a}o Rodrigo and B{\'a}r{\dh}arson, Hlynur and Gu{\dh}brandsson, J{\'o}hannes and Einarsson, Hafsteinn},
+  journal={Ecological Informatics},
+  pages={103462},
+  year={2025},
+  publisher={Elsevier}
 }
 ```
 
